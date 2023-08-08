@@ -1,0 +1,13 @@
+{
+  "name":"Siquan's MusicPlayer",
+  "short_name":"SMP",
+  "start_url":"/",
+  "display": "standalone",
+  "prefer_related_applications": true,
+  "icons":[
+    {
+      "sizes":"256x256",
+      "src":"icon.png"
+    }
+  ]
+}
