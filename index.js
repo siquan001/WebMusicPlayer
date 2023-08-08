@@ -134,6 +134,15 @@ mp.onpause = function () {
   playbtn.className = 'bi bi-play-fill';
 }
 
+document.getElementById("webqd").onclick=function(){
+  searchTags(mname.innerText.substring(0,mname.innerText.lastIndexOf('.')),function(a){
+    mimg.src = a.img;
+    mtitle.innerHTML = a.audio_name;
+    malbum.innerHTML = a.album_name;
+    xrlrc(a.lyrics);
+  });
+}
+
 playbtn.onclick = function () {
   if (mp.paused) {
     mp.play();
@@ -247,4 +256,27 @@ document.querySelector("#nextrule").onclick = function () {
   var list = ['repeat', 'repeat-1', 'shuffle'];
   nextrule = list[(list.indexOf(nextrule) + 1) > 2 ? 0 : (list.indexOf(nextrule) + 1)];
   this.className = 'bi bi-' + nextrule;
+}
+
+function searchTags(name,callback){
+  jsonp('https://mobiles.kugou.com/api/v3/search/song?format=jsonp&keyword=' + name + '&page=1&pagesize=2&showtype=1',function(res){
+    var hash=res.data.info[0].hash;
+    var albumid=res.data.info[0].album_id;
+    jsonp("https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + hash +
+    "&dfid=2mScsJ16ucV81qLdzD238ELf&appid=1014&mid=1b211caf58cd1e1fdfea5a4657cc21f5&platid=4&album_id=" + albumid +
+    "&_=" + Date.now(),function(a){
+      callback(a.data);
+    })
+  })
+}
+function jsonp(src,callback){
+  var cbn='a'+Math.random().toString(16).slice(2)+Date.now().toString(16);
+  var s=document.createElement('script');
+  s.src=src+'&callback='+cbn;
+  document.body.append(s);
+  window[cbn]=function(r){
+    delete window[cbn];
+    s.remove();
+    callback(r);
+  }
 }
