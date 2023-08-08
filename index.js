@@ -24,12 +24,15 @@ folderupload_input.onchange = function () {
               td.title=td.innerText;
             })
             tr.onclick = function () {
-              var image = tags.picture;
-              var base64String = "";
-              for (var i = 0; i < image.data.length; i++) {
-                base64String += String.fromCharCode(image.data[i]);
+              var src='';
+              if(tags.picture){
+                var image = tags.picture;
+                var base64String = "";
+                for (var i = 0; i < image.data.length; i++) {
+                  base64String += String.fromCharCode(image.data[i]);
+                }
+                src = "data:" + image.format + ";base64," + window.btoa(base64String);
               }
-              var src = "data:" + image.format + ";base64," + window.btoa(base64String);
               if (document.querySelector("tr.act")) { document.querySelector("tr.act").classList.remove('act') };
               play(url, src, tags.artist, tags.title, tags.album, filename, tags.lyrics.U, tr);
             }
